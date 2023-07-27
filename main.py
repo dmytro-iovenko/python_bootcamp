@@ -23,7 +23,7 @@ import pandas as pd
 ### Series Methods And Handling ###
 # Skill Challenge 3
 # isolate the non-nulls in the alcohol series and assign them to the variable wine_servings
-alcohol = pd.read_csv('drinks.csv', usecols=['country', 'wine_servings'], index_col='country').squeeze('columns')
+#alcohol = pd.read_csv('drinks.csv', usecols=['country', 'wine_servings'], index_col='country').squeeze('columns')
 #wine_servings = alcohol.loc[alcohol.notnull()]
 # what is the total wine consumed by countries in wine_servings? -- 8221.0
 #total = wine_servings.sum() 
@@ -32,10 +32,28 @@ alcohol = pd.read_csv('drinks.csv', usecols=['country', 'wine_servings'], index_
 
 # Skill Challenge 4
 # select all the countries from alcohol that have more then 50 wine servings, and save them in a variable fifty_plus
-fifty_plus = alcohol[alcohol>50]
+#fifty_plus = alcohol[alcohol>50]
 # from fifty_plus, choose the counties with the smallest 20 wine servings values
-smallest20 = fifty_plus.nsmallest(20)
+#smallest20 = fifty_plus.nsmallest(20)
 # what is the mean, median and standart deviation for the sample from step 2?
-smallest20.mean() # 74.25
-smallest20.median() # 73.5
-smallest20.std() #19.07
+#smallest20.mean() # 74.25
+#smallest20.median() # 73.5
+#smallest20.std() #19.07
+
+# Skill Challenge 5
+# read the drinks.csv, bringing the beer_servings sequence into a new series 'beers' with country acting as the index.
+beers = pd.read_csv('drinks.csv', usecols=['country', 'beer_servings'], index_col='country').squeeze('columns')
+# calculate the mean, median, and standart deviation. Is the distribution right or left skewed?
+ser_mean = beers.mean() # 102.87078651685393
+ser_median = beers.median() # 60.0
+ser_std = beers.std() # 100.6457126793478 - Right skewed
+# slace the first 10 countries from beers
+first_ten = beers[:10]
+# are these relatively large or small relative to the rest of the sample? 
+a = (beers - ser_mean).apply(lambda x: 'low' if x<0 else 'high').value_counts() # small
+# better way - to calculate standart scores (z-scores)
+z_scores = first_ten.apply(lambda x: (x-ser_mean)/ser_std)
+#z_scores = (beers - beers.mean())/beers.std()
+print(z_scores)
+#z_scores.abs().max() - take only positive values and then max value or 
+# beers.idxmax()
