@@ -23,10 +23,22 @@ units = units.replace('', np.nan).dropna(axis=1)
 # rename labels (columns) to not lose data
 # create mapper
 mapper = {k : k + '_' + units[k].at[0] for k in units}
-nutritions = df.rename(columns=mapper)
+nutrition = df.rename(columns=mapper)
 # remove units from values
-nutritions.replace('[a-zA-Z]','',regex=True,inplace=True)
+nutrition.replace('[a-zA-Z]','',regex=True,inplace=True)
 # cast to float
-nutritions = nutritions.astype(float)
+nutrition = nutrition.astype(float)
 
-print(nutritions.head())
+# find the 10 foods that have the most Vitamin B12
+#nutrition.loc[:, 'vitamin_b12_mcg'].nlargest(10)
+#vit_b12 = nutrition.sort_values(by=['vitamin_b12_mcg'],ascending=False).head(10).vitamin_b12_mcg # dataframe in output
+vit_b12 = nutrition.vitamin_b12_mcg.nlargest(10) # series in output
+# isolate the foods in the dataset that contain, or are based on, eggplant.
+eggplant_food = nutrition.filter(regex='(?i)ggplant', axis=0)
+# which of them has the most sodium?
+#nutrition.filter(regex='(?i)ggplant', axis=0).sodium_mg.nlargest(1)
+most_sodium = eggplant_food.sodium_mg.idxmax() # Eggplant, pickled - 1674
+# select a slice of the dataframe that contains 4 random rows and 2 random columns
+nutrition.sample(4).sample(2,axis=1)
+
+
