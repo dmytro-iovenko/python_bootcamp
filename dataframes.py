@@ -57,3 +57,22 @@ mp2sd = m + nutrition.vitamin_c_mg.std() * 2 # 97.76
 mp3sd = m + nutrition.vitamin_c_mg.std() * 3 # 143.87
 nutrition[nutrition.vitamin_c_mg.between(mp2sd, mp3sd)].shape # (17,75)
 
+#Skill Challenge 4
+# find the players that meet these criteria:
+# they're English (nationality)
+players = pd.read_csv('soccer.csv')
+english_players = players[players.nationality=='England'] # 158
+# and their market value is more than twice the average market value in the league (market_value), and
+mean_mv = players.market_value.mean() # 11.125649350649349
+players[(players.nationality == 'England') & (players.market_value > mean_mv * 2)]
+# they either have more than 4,000 views (page_views) or are a new signing (new_signing) but not both
+# x = (players[(players.nationality == 'England') & (players.market_value > mean_mv * 2) & (players.page_views > 4000)]) | \
+#     (players[(players.nationality == 'England') & (players.market_value > mean_mv * 2) & (players.new_signing == 1)])
+players[(players.nationality == 'England') & (players.market_value > mean_mv * 2) & ((players.page_views > 4000) | (players.new_signing == 1))] 
+# result: 3 rows John Stones, Dele Alli, Harry Kane 
+### Another approach with XOR ###
+english = players.nationality=='England'
+above_average = players.market_value > mean_mv * 2
+popular_xor_new = (players.page_views > 4000) ^ (players.new_signing == 1)
+players.loc[english & above_average & popular_xor_new]
+
