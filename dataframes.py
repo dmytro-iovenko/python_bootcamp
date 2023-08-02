@@ -41,4 +41,19 @@ most_sodium = eggplant_food.sodium_mg.idxmax() # Eggplant, pickled - 1674
 # select a slice of the dataframe that contains 4 random rows and 2 random columns
 nutrition.sample(4).sample(2,axis=1)
 
+#Skill Challenge 3
+# remove all the food items that contain at least one NaN. Do this in a way that modifies the dataframe.
+nutrition.dropna(inplace=True)
+# How many food items remain after the exclusion?
+nutrition.count() # 7199
+len(nutrition) # 7199
+# from the remaining records, isolate those that have between 20 and 40 mg of Vitamin C per 100g serving.
+nutrition[nutrition.vitamin_c_mg.between(20,40)]
+# of these foods, which one is the least caloric, i.e. has the minimum calories?
+nutrition.nsmallest(1,'calories') # Asparagus
+# how many food items in the dataframe have Vitamin C levels of between 2 and 3 standart deviations (inclusive) above the mean?
+m = nutrition.vitamin_c_mg.mean() # 5.55
+mp2sd = m + nutrition.vitamin_c_mg.std() * 2 # 97.76
+mp3sd = m + nutrition.vitamin_c_mg.std() * 3 # 143.87
+nutrition[nutrition.vitamin_c_mg.between(mp2sd, mp3sd)].shape # (17,75)
 
