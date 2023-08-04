@@ -90,6 +90,22 @@ players.sort_index(inplace=True)
 # 3) sort the dataframe values by club and market_value where the club is alphabetical and the market value is in descending order
 players.sort_values(by=['club','market_value'], ascending=[True, False]) # Arsenal     Alexis Sanchez
 
+#Skill Challenge 6 - duplicates & NAs
+players = pd.read_csv('soccer.csv')
+#print(players.shape)
+#print(players.head())
+# 1) for players dataframe remove rows labeled 2,10,21 and the market_value column.
+# Do not modify the underlying dataframe. Assign the result to df2
+df2 = players.drop(index=[2,10,21], columns='market_value')
+print(df2.shape)
+# 2) does the nationality column in df2 contain only NA values? How many unique nationalities are there?
+np.count_nonzero(df2[df2.nationality.isna().values]) # 0
+# quick alternative : df2.nationality.isna().sum()
+df2.nationality.nunique() # 61
+# 3) starting from df2, isolate a datafreame slice of players that contains only the unique age-position for each club.
+# Do not include the club column itself.
+#x = df2[['club', 'age', 'position']].drop_duplicates().drop(columns='club') # 433,2
+df2.drop_duplicates(subset=['age', 'club', 'position'], keep = 'first').loc[:, ['age', 'position']]
 
 
 
