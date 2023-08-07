@@ -107,5 +107,27 @@ df2.nationality.nunique() # 61
 #x = df2[['club', 'age', 'position']].drop_duplicates().drop(columns='club') # 433,2
 df2.drop_duplicates(subset=['age', 'club', 'position'], keep = 'first').loc[:, ['age', 'position']]
 
+#Skill Challenge 7 - 
+# 1) create a standalong function that
+#    - accepts a single parameter x
+#    - returns the string 'relatively unknown' if x < 200 
+#    - 'kind of popular' if x >= 200 and x < 600
+#    - 'popular' if x >= 600 and x < 2000
+#    - 'super-popular' oterwise
+def get_popularity(x):
+    if x < 200:
+        return 'relatively unknown'
+    elif x < 600:
+        return 'kind of popular'
+    elif x < 2000:
+        return 'popular'
+    else:
+        return 'super-popular'
 
-
+# 2) apply the function from the step1 to the players page_views column. Use a method that supports vectorized operations
+players.page_views.apply(get_popularity)
+# 3) add the output from the step2 as a new column 'popularity' to the players dataframe
+players['popularity'] = players.page_views.apply(get_popularity)
+# 4) how many "super-popular" players are there? - 37
+len(players[players.popularity =='super-popular'])
+#print(players[players.popularity =='super-popular'].name.size)
