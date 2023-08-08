@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+
 #Skill Challenge 1
 # 1) randomly select 10 food items and assign the resulting dataframe to a new variable called nutr_mini
 df = pd.read_csv('nutrition.csv', index_col='name').drop('Unnamed: 0', axis=1)
@@ -107,7 +108,7 @@ df2.nationality.nunique() # 61
 #x = df2[['club', 'age', 'position']].drop_duplicates().drop(columns='club') # 433,2
 df2.drop_duplicates(subset=['age', 'club', 'position'], keep = 'first').loc[:, ['age', 'position']]
 
-#Skill Challenge 7 - 
+#Skill Challenge 7 - apply() function
 # 1) create a standalong function that
 #    - accepts a single parameter x
 #    - returns the string 'relatively unknown' if x < 200 
@@ -131,3 +132,27 @@ players['popularity'] = players.page_views.apply(get_popularity)
 # 4) how many "super-popular" players are there? - 37
 len(players[players.popularity =='super-popular'])
 #print(players[players.popularity =='super-popular'].name.size)
+
+#Skill Challenge 8 - adding row/column 
+# 1) from the players dataframe select 4 rows and 4 columns, of no particular order. Assign the result to df_random
+#df_random = players.sample(4).sample(4, axis=1)
+df_random = players.loc[[15,451,29,312],['name', 'age', 'page_views', 'club']]
+# 2) extend df_random vertically by adding a new row, and horizontally by adding a new column. Do this as 2 separate operations
+alex = pd.Series({
+    'name': 'Alex',
+    'age': 23,
+    'page_views': 730,
+    'club': 'Arsenal'
+}, name = 5)
+df_random = df_random.append(alex)
+#df_random['goals'] = [1, 3, 2, 1, 1]
+df_random = df_random.assign(goals=[1, 3, 2, 1, 1])
+
+
+
+
+
+
+
+
+
