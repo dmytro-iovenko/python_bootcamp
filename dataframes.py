@@ -148,6 +148,26 @@ df_random = df_random.append(alex)
 #df_random['goals'] = [1, 3, 2, 1, 1]
 df_random = df_random.assign(goals=[1, 3, 2, 1, 1])
 
+### Working With Multiple DataFrames ###
+
+#Skill Challenge 9 - concatenating dataframes 
+state = pd.read_csv('state.csv')
+liberal = pd.read_csv('liberal_arts.csv')
+# 1) concetenate the liberal and state schools into a new dataframe
+new_df = pd.concat([liberal, state])
+# how many unique school names there?
+# new_df.nunique() >> will show all columns
+new_df['School Name'].nunique() # 222
+# 2) what is the average median starting salary in the dataframe created above?
+mean_mms = new_df['Starting Median Salary'].replace('[$, ]','', regex=True).astype(float).mean() # 44469.36936936937 # .replace(r'\$|,','', regex=True)
+# 3) create a short dataframe that shows the top3 liberal arts and state schools that produce the highest(mid-career) earning graduates
+# show the School Name and Mid-Career Median Salary columns from each dataset side by side, i.e. horizontally
+# bonus: nest the column labels within 'Liberal Arts' and 'State' labeles
+liberal2 = liberal.sort_values(by='Mid-Career Median Salary', ascending=False)[:3].reset_index(drop=True)
+state2 = state.sort_values(by='Mid-Career Median Salary', ascending=False)[:3].reset_index(drop=True)
+short_df = pd.concat([liberal2,state2], axis=1, keys=['Liberal Arts', 'State'])  
+
+ 
 
 
 
