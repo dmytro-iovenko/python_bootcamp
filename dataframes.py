@@ -167,9 +167,22 @@ liberal2 = liberal.sort_values(by='Mid-Career Median Salary', ascending=False)[:
 state2 = state.sort_values(by='Mid-Career Median Salary', ascending=False)[:3].reset_index(drop=True)
 short_df = pd.concat([liberal2,state2], axis=1, keys=['Liberal Arts', 'State'])  
 
- 
-
-
+#Skill Challenge 10 -
+# 1) merge liberal arts schools with regions and assign the resulting dataframe to dfm
+regions = pd.read_csv('regions.csv')
+dfm = pd.merge(liberal, regions, on='School Name')
+# what region has the highest number of liberal arts schools?
+#dfm.loc[:,'Region'].value_counts() # Northeastern - 25
+dfm.Region.value_counts()
+# 2) set school_name as the index of the mid_career dataset
+mid_career = pd.read_csv('mid_career_salaries.csv')
+mid_career.set_index('school_name', inplace=True)
+# 3) merge tha dfm and mid_career dataframes. 
+pd.merge(dfm, mid_career, left_on='School Name', right_index=True)
+# is the join operation one-to-one?
+left_key = mid_career.index
+right_key = dfm['School Name']
+left_key[left_key.isin(right_key)].value_counts() # Randolph-Macon College - 2 1-M
 
 
 
