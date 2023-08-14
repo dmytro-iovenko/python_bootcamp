@@ -167,7 +167,7 @@ liberal2 = liberal.sort_values(by='Mid-Career Median Salary', ascending=False)[:
 state2 = state.sort_values(by='Mid-Career Median Salary', ascending=False)[:3].reset_index(drop=True)
 short_df = pd.concat([liberal2,state2], axis=1, keys=['Liberal Arts', 'State'])  
 
-#Skill Challenge 10 -
+#Skill Challenge 10 - merging dataframes
 # 1) merge liberal arts schools with regions and assign the resulting dataframe to dfm
 regions = pd.read_csv('regions.csv')
 dfm = pd.merge(liberal, regions, on='School Name')
@@ -183,6 +183,13 @@ pd.merge(dfm, mid_career, left_on='School Name', right_index=True)
 left_key = mid_career.index
 right_key = dfm['School Name']
 left_key[left_key.isin(right_key)].value_counts() # Randolph-Macon College - 2 1-M
+
+### MultiIndexes ###
+tech = pd.read_csv('tech_giants.csv')
+print(tech.head())
+
+
+
 
 
 
