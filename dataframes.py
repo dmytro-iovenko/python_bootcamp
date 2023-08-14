@@ -185,8 +185,20 @@ right_key = dfm['School Name']
 left_key[left_key.isin(right_key)].value_counts() # Randolph-Macon College - 2 1-M
 
 ### MultiIndexes ###
-tech = pd.read_csv('tech_giants.csv')
-print(tech.head())
+
+tech = pd.read_csv('tech_giants.csv',index_col=['date','name'])
+#Skill Challenge 10 - selecting from MI dataframes
+# 1) from the tech dataframe, select all the stock prices between July 13,2015 and August 17,2016
+#  assign the result to the variable tech_df2
+tech_df2 = tech.loc['2015-07-13':'2016-08-17','open':'low']
+# an xs() alternative: tech.xs(slice('2015-07-13','2016-08-17'),level=0)
+# 2) select 10 days random from tech_df2, containing only AAPL price data
+tech_df2.loc[(slice(None),'AAPL'),:].sample(10)  # using slice(None)
+# an xs() alternative: tech.xs(level=1,key='APPL').sample(10)
+# 3) select all the intraday high and low prices for AAPL and GOOGL for all the dates in tech_df2
+tech_df2.loc[pd.IndexSlice[:,['AAPL', 'GOOGL']],'high':'low']  # using pd.IndexSlice
+# alternative: tech_df2.loc[(slice(None),['AAPL', 'GOOGL']),['high','low']]
+
 
 
 
