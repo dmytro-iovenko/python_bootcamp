@@ -190,7 +190,7 @@ tech = pd.read_csv('tech_giants.csv',index_col=['date','name'])
 #Skill Challenge 10 - selecting from MI dataframes
 # 1) from the tech dataframe, select all the stock prices between July 13,2015 and August 17,2016
 #  assign the result to the variable tech_df2
-tech_df2 = tech.loc['2015-07-13':'2016-08-17','open':'low']
+tech_df2 = tech.loc['2015-07-13':'2016-08-17']                     #,'open':'low']
 # an xs() alternative: tech.xs(slice('2015-07-13','2016-08-17'),level=0)
 # 2) select 10 days random from tech_df2, containing only AAPL price data
 tech_df2.loc[(slice(None),'AAPL'),:].sample(10)  # using slice(None)
@@ -199,7 +199,20 @@ tech_df2.loc[(slice(None),'AAPL'),:].sample(10)  # using slice(None)
 tech_df2.loc[pd.IndexSlice[:,['AAPL', 'GOOGL']],'high':'low']  # using pd.IndexSlice
 # alternative: tech_df2.loc[(slice(None),['AAPL', 'GOOGL']),['high','low']]
 
-
+#Skill Challenge 11 - manipulating multiindex
+# 1) change the index of the tech dataframe to a 3-level MultiIndex containing year, month, and day 
+# on levels 0,1, and 2, respectively. Set the resulting dataframe to the tech_df3
+tech = pd.read_csv('tech_giants.csv')
+#tech_df3 = tech_df2.reset_index().set_index(['year','month','day'])
+tech_df3 = tech.set_index(['year','month','day'])
+# 2) from the tech_df3 dataset, select all the trading days from the year 2019
+# in addition, add the existing column axis as the 4th level of the multiindex
+# assign the resulting series to the variable tech_series
+tech_series = tech_df3.loc[(2019,slice(None),slice(None)),:].stack()  # stack() - to pivot column axis
+#print(tech_series.index.nlevels) # 4
+# 3) from the tech_series dataframe, find the average close price and it's standart deviation
+mean_ts = tech_series.xs(level=3, key='close').mean() # 686.3976196319019
+std_ts = tech_series.xs(level=3, key='close').std() # 677.2268499713305
 
 
 
