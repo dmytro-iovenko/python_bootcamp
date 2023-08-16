@@ -206,7 +206,7 @@ tech = pd.read_csv('tech_giants.csv')
 #tech_df3 = tech_df2.reset_index().set_index(['year','month','day'])
 tech_df3 = tech.set_index(['year','month','day'])
 # 2) from the tech_df3 dataset, select all the trading days from the year 2019
-# in addition, add the existing column axis as the 4th level of the multiindex
+# add the existing column axis as the 4th level of the multiindex
 # assign the resulting series to the variable tech_series
 tech_series = tech_df3.loc[(2019,slice(None),slice(None)),:].stack()  # stack() - to pivot column axis
 #print(tech_series.index.nlevels) # 4
@@ -214,8 +214,14 @@ tech_series = tech_df3.loc[(2019,slice(None),slice(None)),:].stack()  # stack() 
 mean_ts = tech_series.xs(level=3, key='close').mean() # 686.3976196319019
 std_ts = tech_series.xs(level=3, key='close').std() # 677.2268499713305
 
-
-
+#Skill Challenge 12 - groupby() and aggregates
+games = pd.read_csv('games_sales.csv')
+# 1) create a smaller dataframe (publishers) from games, selecting only the Publisher, Genre, Platform, and NA_Sales columns.
+publishers = games.loc[:, ['Publisher','Genre','Platform','NA_Sales']]
+# 2) from the publishers dataframe, find the top 10 game publishers in North America by total sales
+publishers.groupby('Publisher').sum().sort_values(by='NA_Sales', ascending=False).head(10)
+# 3) what the gaming platform that has attracted the most sales in North America
+publishers.groupby('Platform').sum().sort_values(by='NA_Sales', ascending=False).iloc[0] # X360
 
 
 
