@@ -216,14 +216,23 @@ std_ts = tech_series.xs(level=3, key='close').std() # 677.2268499713305
 
 #Skill Challenge 12 - groupby() and aggregates
 games = pd.read_csv('games_sales.csv')
-# 1) create a smaller dataframe (publishers) from games, selecting only the Publisher, Genre, Platform, and NA_Sales columns.
-publishers = games.loc[:, ['Publisher','Genre','Platform','NA_Sales']]
+# 1) create a smaller dataframe (publishers) from games, selecting only the Publisher, Genre, Platform, and NA_Sales columns
+publishers = games.loc[:, ['Publisher', 'Genre', 'Platform', 'NA_Sales']]
 # 2) from the publishers dataframe, find the top 10 game publishers in North America by total sales
 publishers.groupby('Publisher').sum().sort_values(by='NA_Sales', ascending=False).head(10)
 # 3) what the gaming platform that has attracted the most sales in North America
 publishers.groupby('Platform').sum().sort_values(by='NA_Sales', ascending=False).iloc[0] # X360
 
-
+#Skill Challenge 13 - selecting with groupby()
+# 1) with the games dataframe, calculate the total global sales (Global_Sales) across for each year (Year) across all records
+# what are the top 3 years by aggregate global sales?
+games.groupby('Year').sum().sort_values(by='Global_Sales', ascending=False).head(3) # 2010,2011,2008  
+# alternative: games.groupby('Year').sum()['Global_Sales'].nlargest(3)
+# 2) in the games dataframe, what Genre, in what Year, in what Platform sold the most in Europe (EU_Sales)?
+games.groupby(['Genre', 'Year', 'Platform']).sum().sort_values(by='EU_Sales', ascending=False).index[0] # ('Action', 2013.0, 'PS3')
+# alternative: games.groupby(['Genre','Year','Platform']).sum()['EU_Sales'].nlargest(1)
+# 3) find all the Names in the games dataset whose Genre in their respective Platform sold more in Japan (JP_Sales) than in Europe (EU_Sales)
+games.groupby(['Platform', 'Genre']).filter(lambda x: x['JP_Sales'].sum() > x.EU_Sales.sum())
 
 
 
