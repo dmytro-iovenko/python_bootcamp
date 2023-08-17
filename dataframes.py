@@ -234,5 +234,21 @@ games.groupby(['Genre', 'Year', 'Platform']).sum().sort_values(by='EU_Sales', as
 # 3) find all the Names in the games dataset whose Genre in their respective Platform sold more in Japan (JP_Sales) than in Europe (EU_Sales)
 games.groupby(['Platform', 'Genre']).filter(lambda x: x['JP_Sales'].sum() > x.EU_Sales.sum())
 
+### Pivot ###
 
+sat = pd.read_csv('scores.csv')
+sat['Percent Tested'] = sat['Percent Tested'].replace(regex='%', value='').astype(float)
+print(sat.head())
+
+
+
+#Skill Challenge 14 - pivoting
+# 1) starting with main dataframe (sat), create a pivot table that summorizes the total student enrollment (Student Enrollment)
+# across all 5 boroughs (Borough). Which borough have the highest and lowest high school student bodies?
+
+# 2) modify the pivot table from step above to also reflect the average Student Enrollment across boroughs, in the same pivot table
+
+# 3) create a pivot table of high schools from the Queens borough (Borough), 
+# containing the SAT section scores (SAT Section, Score) as columns and the school name (School Name) as index
+# sort the table in descending order by math section scores
 
