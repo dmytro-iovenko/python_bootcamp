@@ -238,17 +238,44 @@ games.groupby(['Platform', 'Genre']).filter(lambda x: x['JP_Sales'].sum() > x.EU
 
 sat = pd.read_csv('scores.csv')
 sat['Percent Tested'] = sat['Percent Tested'].replace(regex='%', value='').astype(float)
-print(sat.head())
 
-
-
-#Skill Challenge 14 - pivoting
+#Skill Challenge 14 - pivoting data
 # 1) starting with main dataframe (sat), create a pivot table that summorizes the total student enrollment (Student Enrollment)
 # across all 5 boroughs (Borough). Which borough have the highest and lowest high school student bodies?
-
+#pivoted = sat.pivot(columns='Borough',values='Student Enrollment').sum()
+pivoted = sat.pivot_table(values='Student Enrollment', index='Borough', aggfunc='sum')
+####
+#                Student Enrollment
+# Borough
+# Bronx                      159267
+# Brooklyn                   242814
+# Manhattan                  170370
+# Queens                     232437
+# Staten Island               55380
+pivoted.nlargest(1, columns='Student Enrollment') # Brooklyn - 242814.0
+pivoted.idxmax() # Brooklyn
+pivoted.nsmallest(1, columns='Student Enrollment') # Staten Island - 55380.0
+pivoted.idxmin() # Staten Island
 # 2) modify the pivot table from step above to also reflect the average Student Enrollment across boroughs, in the same pivot table
-
+modified = sat.pivot_table(values='Student Enrollment', index='Borough', aggfunc=['sum', 'mean'])
+####
+#                              sum               mean
+#               Student Enrollment Student Enrollment
+# Borough
+# Bronx                     159267         541.724490
+# Brooklyn                  242814         742.550459
+# Manhattan                 170370         638.089888
+# Queens                    232437        1122.884058
+# Staten Island              55380        1846.000000
 # 3) create a pivot table of high schools from the Queens borough (Borough), 
 # containing the SAT section scores (SAT Section, Score) as columns and the school name (School Name) as index
 # sort the table in descending order by math section scores
-
+queens = sat[sat.Borough =='Queens'].pivot_table(columns=['SAT Section'], index='School Name', values='Score').sort_values(by='Math', ascending=False)
+####
+# SAT Section                                         Math  Reading  Writing
+# School Name
+# Queens High School for the Sciences at York Col...   701      621      625
+# Townsend Harris High School                          680      640      661
+# Baccalaureate School for Global Education            633      620      628
+# Bard High School Early College Queens                631      598      610
+# Scholars' Academy                                    588      560      568
