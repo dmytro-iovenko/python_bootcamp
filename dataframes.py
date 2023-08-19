@@ -279,3 +279,4 @@ queens = sat[sat.Borough =='Queens'].pivot_table(columns=['SAT Section'], index=
 # Baccalaureate School for Global Education            633      620      628
 # Bard High School Early College Queens                631      598      610
 # Scholars' Academy                                    588      560      568
+
