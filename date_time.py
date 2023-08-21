@@ -39,3 +39,21 @@ pdts.day_name() #Thursday
 pdts.days_in_month # 31
 pdts.quarter # 3
 pdts.isocalendar() # (year=1776, week=27, weekday=4)
+## adding new data ##
+brent = pd.read_csv('BrentOilPrices.csv')
+brent.Date = brent.Date.astype(np.datetime64) # convert date from string to numpy object
+#brent.dtypes
+# Date     datetime64[ns]
+#Price           float64
+#dtype: object
+brent.set_index('Date', inplace=True) # get DatetimeIndex 
+brent2 = pd.read_csv('BrentOilPrices.csv', index_col=0, parse_dates=True) # for good data quality
+# indexing dates by label
+# Q: select brent price on Jan 3rd 2017
+brent.loc['2017-01-03'] # 55.05
+# Q: select brent price from Jan 3rd to Jan 6th 2017
+brent.loc['2017-01-03':'2017-01-06']
+# Q: select all prices from Jan 2019 - partial string indexing
+brent.loc['2019-01']
+# Q: select prices from the first two month of 2019
+brent.loc['2019-01':'2019-02']
