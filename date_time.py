@@ -94,5 +94,28 @@ dst = pd.Timestamp('14 march 2021', tz='US/Eastern') # 2021-03-14 00:00:00-05:00
 dst + pd.DateOffset(days=1) # 2021-03-15 00:00:00-04:00 only 23 hours added
 dst + pd.Timedelta(days=1) # 2021-03-15 01:00:00-04:00 added 24 hours
 
+## resampling timeseries ##
+# resampling the frequency down -> downsampe D(aily)-> M(onthly)
+brent.resample('M') # DatetimeIndexResampler object created
+# many datapoints -> fewer and far between (object waits for agg function)
+brent.resample('M').median()
+# resampling the frequency up -> upsample D(aily)-> H(ourly)
+brent.resample('8H').mean()
+# 2000-01-04 16:00:00    NaN
+# 2000-01-05 00:00:00  23.72
+# 2000-01-05 08:00:00    NaN
+# how to deal with NaNs? -> interpolation
+# 23.95 N1 N2 23.72
+# key assumption in linear interpolation: distances are equal; the items are equally spaced
+# diff = (23.72 - 23.95)/3 # -0.07666666666666681
+# N1 = 23.95 + diff # 23.87333333333333
+# N2 = N1 + diff # 23.796666666666663
+# final price 23.72 = N2 + diff
+brent.resample('8H').interpolate(method='linear')
+# 2019-09-29 08:00:00  61.321111
+# 2019-09-29 16:00:00  61.155556
+# 2019-09-30 00:00:00  60.990000
+
+
 
 
