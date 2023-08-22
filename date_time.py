@@ -69,3 +69,30 @@ df_std = brent.Price.std() # 3.9901226782366077
 brent.loc['2018-02'].mean() # 65.3175
 brent.loc['2017-03'].median() # 50.65
 brent.loc['2018-02'].mean() > brent.loc['2017-03'].median() # True
+
+## shifting dates with pd.DateOffset() ##
+dob = pd.Timestamp('2020-03-09') # racing pigeon
+# Q; when was the egg laid? (need to -18 days)
+pd.DateOffset(days=18) # create an object for 18 days
+dob - pd.DateOffset(days=18) # 2020-02-20 00:00:00
+# DateOffset supports many temporal params
+pd.DateOffset(days=4, minutes=10, nanoseconds=2)
+pd.DateOffset(year=10)
+# reflect closing time 6 PM for each day
+brent.set_index(brent.index + pd.DateOffset(hours=18))
+# 2019-09-26 18:00:00  62.08
+# 2019-09-27 18:00:00  62.48
+# 2019-09-30 18:00:00  60.99
+## the TimeDelta class ##
+pd.Timedelta(days=3, hours=4)
+ts = brent.iloc[0].name # 2000-01-04 00:00:00
+ts + pd.Timedelta(days=3, hours=4) # 2000-01-07 04:00:00
+ts + pd.DateOffset(days=3, hours=4) # 2000-01-07 04:00:00
+# key differ: the Timedelta operates on absolute time (day = 24 hours), when DateOffset operates on calendar time
+# DateOffset is "calendar aware": takes into consideration thongs like daylight saving time DST (day could be 23-25 hours)
+dst = pd.Timestamp('14 march 2021', tz='US/Eastern') # 2021-03-14 00:00:00-05:00
+dst + pd.DateOffset(days=1) # 2021-03-15 00:00:00-04:00 only 23 hours added
+dst + pd.Timedelta(days=1) # 2021-03-15 01:00:00-04:00 added 24 hours
+
+
+
