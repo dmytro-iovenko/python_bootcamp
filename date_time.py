@@ -57,3 +57,15 @@ brent.loc['2017-01-03':'2017-01-06']
 brent.loc['2019-01']
 # Q: select prices from the first two month of 2019
 brent.loc['2019-01':'2019-02']
+
+# Skill Challenge 15 - selecting dates
+# 1) using the brent time series, create a shorter dataframe that only contains the dates from 1 December 2015 to 31 March 2016
+brent.loc['2015-12-01':'2016-03-31'] # 84 rows
+# 2) repeat the above, but this time using partial string indexing instead of specifying full dates
+df = brent.loc['2015-12':'2016-03'] # 84 rows
+# what was the standart deviation of prices during this period?
+df_std = brent.Price.std() # 3.9901226782366077
+# 3) was the mean price from February 2018 greater or less than the median price from March 2017?
+brent.loc['2018-02'].mean() # 65.3175
+brent.loc['2017-03'].median() # 50.65
+brent.loc['2018-02'].mean() > brent.loc['2017-03'].median() # True
