@@ -115,7 +115,56 @@ brent.resample('8H').interpolate(method='linear')
 # 2019-09-29 08:00:00  61.321111
 # 2019-09-29 16:00:00  61.155556
 # 2019-09-30 00:00:00  60.990000
+# asfreq() gives a dataframe with changed frequency, resumple - gives resample object
+brent.asfreq('M', method='ffill')
+## rolling windows ##
+# window size: 3, aggfunc: mean()
+brent.rolling(3).mean()
 
-
+# Skill Challenge 16 - handling time & date
+# 1) add a new column (Quarter) to the bent dataframe that contains each date's respective calendar
+brent['Quarter'] = brent.index.quarter
+# 2) using the Quarter column and the groupby(), calculate the average price and standard deviation for each quarter of the year 2014
+brent.loc['2014'].groupby('Quarter').mean()
+#               Price
+# Quarter
+# 1        108.141935
+# 2        109.694063
+# 3        101.899844
+# 4         76.429219
+brent.loc['2014'].groupby('Quarter').std()
+#              Price
+# Quarter
+# 1         1.280641
+# 2         2.406442
+# 3         4.364868
+# 4        11.410171
+brent['2014'].groupby('Quarter').agg(['mean', 'std']) # the better way
+#                mean        std
+# Quarter
+# 1        108.141935   1.280641
+# 2        109.694063   2.406442
+# 3        101.899844   4.364868
+# 4         76.429219  11.410171
+# 3) reproduce the Price average and standard deviation output from step2. but using resample and w/o relying on the Quarter
+brent.loc['2014'].resample('Q').Price.mean()
+# Date
+# 2014-03-31    108.141935
+# 2014-06-30    109.694063
+# 2014-09-30    101.899844
+# 2014-12-31     76.429219
+brent.loc['2014','Price'].resample('Q').std()
+# Date
+# 2014-03-31     1.280641
+# 2014-06-30     2.406442
+# 2014-09-30     4.364868
+# 2014-12-31    11.410171
+brent.loc['2014', 'Price'].resample('Q').agg({'mean', 'std'})  # the better way
+#                   mean        std
+# Date
+# 2014-03-31  108.141935   1.280641
+# 2014-06-30  109.694063   2.406442
+# 2014-09-30  101.899844   4.364868
+# 2014-12-31   76.429219  11.410171
 
 
