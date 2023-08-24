@@ -95,3 +95,28 @@ boston[['First Name', 'Last Name']] = boston.Name.str.split(', ', expand=True, n
 #               Name  Age M/F      City State Country Official Time  Overall  Gender Years Ran First Name Last Name
 # 0  Kirui, Geoffrey   24   M  Keringet   NaN     KEN       2:09:37        1       1       NaN      Kirui  Geoffrey
 # 1      Rupp, Galen   30   M  Portland    OR     USA       2:09:58        2       2       NaN       Rupp     Galen
+
+# Skill Challenge 17 - selecting string
+# 1) how many runners have 'James' as a Last Name
+boston['Last Name'].str.find('James').value_counts() # 12
+# -1    988
+#  0     12
+# 2) split all the City names in the dataset by the hyphen character "-", 
+# and create a dataframe (city_parts) containing each split component of the split name
+city_parts = boston.City.str.split('-', expand=True)
+# 3) how many cities in the boston dataframe have more than 1 component?
+boston[city_parts.count(axis=1) > 1].City.count() # 13
+boston[city_parts.count(axis=1) > 1].City
+# 2                    Machida-City
+# 35                 Sao Paulo - Sp
+# 188                  Baie-St-Paul
+# 201            Houghton-Le-Spring
+# 371          Boulogne-Billancourt
+# 420                    Mont-Royal
+# 585                Gif-Sur-Yvette
+# 615        Fossambault-Sur-Le-Lac
+# 724         Wiesbaden-Breckenheim
+# 727                    Saint-Tite
+# 794                   Marica - Rj
+# 820    Sainte-Catherine-De-Hatley
+# 830                    Pont-Rouge
