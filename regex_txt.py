@@ -120,3 +120,48 @@ boston[city_parts.count(axis=1) > 1].City
 # 794                   Marica - Rj
 # 820    Sainte-Catherine-De-Hatley
 # 830                    Pont-Rouge
+
+## slicing substrings ##
+# s = 'Welcome to the text manipulation section'
+# Python:
+s[slice(0, 7, 1)] # Welcome
+s[slice(7)] # Welcome -> start=0 and step=1 - default values
+s[0:7:1] # Welcome
+s[:7:] # Welcome
+# Pandas:
+boston.Country.str.slice(0, 2, 1) # US
+boston.Country.str.slice(-2, None, 1) # SA - slicing from the right
+## masking with string methods ## 
+# - create sequence of booleans
+# - use sequence to select from dataframe (or series)
+# Q: select all the Italian runners
+boston.Country.str.match('ITA') # sequens of booleans
+boston.loc[boston.Country.str.match('ITA')]
+# Q: how about all the "Will"s? (contains)
+wills = boston.Name.str.contains('Will') # sequens of booleans
+boston[wills]
+forty5_plus = boston.Age >= 45
+boston[wills & forty5_plus]
+## parsing indicators with get_dummies()
+boston[boston['Years Ran'].notnull()] # values in output : 2015, 2015:2016, 2016
+# for analysis better to have 2 separate columns. Use get_dummies() method with separator sep=':'
+dummies = boston['Years Ran'].str.get_dummies(sep=':') # dataframe of indicator variables
+#      2015  2016
+# 0       0     0
+# 1       0     0
+# 2       0     0
+# 3       0     0
+# 4       1     0
+# the df.insert() to add those column to our dataset next to 'Years Ran'
+boston.insert(boston.columns.get_loc('Years Ran'), 'Ran 2015', dummies['2015'])
+boston.insert(boston.columns.get_loc('Years Ran'), 'Ran 2016', dummies['2016']) # Ran 2015  Ran 2016 Years Ran
+# Q: which top runners from 2017 also ran in the previous two Boston marathons
+boston[(boston['Ran 2015'] == 1) & (boston['Ran 2016'] == 1)]
+# Q: which top runners from 2017 also ran in 2015
+boston['Ran 2015'].sum() # 190
+## text replacement ##
+s += '. This section is about text.'
+s = s.replace('text', 'string')
+boston['M/F'] = boston['M/F'].str.replace('F', 'Female').str.replace('M', 'Male') # Pandas
+# case-insensitive replacements
+boston.Country.str.replace('USA', 'United States', case=False)
