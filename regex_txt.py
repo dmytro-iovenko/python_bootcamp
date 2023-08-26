@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import re
 
 ### Regex and Text Manipulation ###
 
@@ -165,3 +166,34 @@ s = s.replace('text', 'string')
 boston['M/F'] = boston['M/F'].str.replace('F', 'Female').str.replace('M', 'Male') # Pandas
 # case-insensitive replacements
 boston.Country.str.replace('USA', 'United States', case=False)
+## Regex: is this a valid email? ##
+# the re module, email regex, pitfalls, additional resource: https://emailregex.com/
+# define the pattern for email: \w\S*@.*\w
+pattern = r'\w\S*@.*\w' # r - raw string
+re.findall(pattern, 'andy@howto pandas.com') # ['andy@howto pandas.com']
+# masking: andy@gmail.com -> ****@gmail.com
+# - start with an actually valid email
+# - capture the domain part of the email
+# - replace everything except the captured group
+email = 'andy@howto pandas.com'
+pattern = r'\w\S*(@.*\w)'
+print(re.sub(pattern, r'*****\1', email )) # \1 -> refer to the first captured group
+# *****@howto pandas.com
+# for production projects use compile() to get pattern object
+robust_pattern = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)")
+# re.compile('(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)')
+## pandas str contains(), split(), and replace() with regex
+# contains()
+boston.Name[boston.Name.str.contains('Will')] # we can use regex:
+boston.Name[boston.Name.str.contains(r'Will', regex=True)] # the same output 
+# isolate first name Wills
+boston.Name[boston.Name.str.contains(r',\s[wW]ill', regex=True)]
+# isolate first name exact Will
+boston.Name[boston.Name.str.contains(r',\s[wW]ill$', regex=True)] # Will -> $ - indicates end of the string
+# or use \b : r',\s[wW]ill\b' to get names like Will J.
+# split()
+boston.Name.str.split(r'\s', expand=True)
+# replace()
+boston['Official Time'] # 2:09:58
+boston['Official Time'].str.replace(r'(\d+):(\d+):(\d+)', r'\1 hours, \2 minutes, and \3 seconds') #2 hours, 09 minutes, and 58 seconds
+
