@@ -197,3 +197,15 @@ boston.Name.str.split(r'\s', expand=True)
 boston['Official Time'] # 2:09:58
 boston['Official Time'].str.replace(r'(\d+):(\d+):(\d+)', r'\1 hours, \2 minutes, and \3 seconds') #2 hours, 09 minutes, and 58 seconds
 
+# Skill Challenge 18 - practicing split()
+# 1) split yhr Official Time into three separate columns: hours, minutes, and seconds. Store this dataframe in variable final_times
+final_times =  boston['Official Time'].str.split(':', expand=True).rename(columns={0:'Hours', 1:'Minutes', 2:'Seconds'}).astype(int)
+# 2) in the final_times dataframe, create a new column called total that contains the total time in seconds
+final_times['Total'] = final_times.Hours * 3600 + final_times.Minutes * 60 + final_times.Seconds 
+# add the total column to boston dataframe
+boston.insert(boston.columns.get_loc('Official Time')+1, 'Total Time', final_times.Total)
+# 3) do the runners in the boston dataset who also ran in 2016 have a higher or lower average time?
+ran2016 = boston.loc[boston['Ran 2016'] == 1]['Total Time']
+ran2016.mean() # 10043.12
+boston.Total.mean() # 9985.35
+
