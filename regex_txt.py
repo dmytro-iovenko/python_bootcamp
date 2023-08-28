@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import re
 
 ### Regex and Text Manipulation ###
@@ -207,5 +206,5 @@ boston.insert(boston.columns.get_loc('Official Time')+1, 'Total Time', final_tim
 # 3) do the runners in the boston dataset who also ran in 2016 have a higher or lower average time?
 ran2016 = boston.loc[boston['Ran 2016'] == 1]['Total Time']
 ran2016.mean() # 10043.12
-boston.Total.mean() # 9985.35
+boston['Total Time'].mean() # 9985.35
 
