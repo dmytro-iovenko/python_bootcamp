@@ -23,3 +23,16 @@ axes.plot(y.cumsum(), label='y');
 axes.legend(loc='upper left');
 figure.set_size_inches(6, 2);
 # %%
+## line graphs ##
+brent = pd.read_csv('BrentOilPrices.csv')
+print(brent.head(3))
+brent.plot(color='purple');
+tech = pd.read_csv('tech_giants.csv', index_col=0, parse_dates=True)
+fb = tech.loc[tech.name=='FB', 'close'].rename('Facebook')
+msft = tech.loc[tech.name=='MSFT', 'close'].rename('Microsoft')
+aapl = tech.loc[tech.name=='AAPL', 'close'].rename('Apple')
+dfs = pd.concat([fb, msft, aapl], axis=1)
+#print(dfs.head(3))
+dfs.plot();
+dfs.plot(subplots=True, figsize=(13, 6));
+# %%
