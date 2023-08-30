@@ -54,3 +54,11 @@ ax.set_ylabel('# of runners');
 # marathon runners by gender?
 boston['M/F'].value_counts(normalize=True).plot(kind='barh');
 # %%
+## pie plots ##
+games = pd.read_csv('games_sales.csv')
+# what is the market share for each platform in NA?
+games.groupby('Platform').NA_Sales.sum().plot(kind='pie');
+# %%
+# does PS have a larger market share in JP?
+games.loc[:, ['NA_Sales', 'JP_Sales', 'Platform']].groupby('Platform').sum().plot(kind='pie', subplots=True);
+# %%
