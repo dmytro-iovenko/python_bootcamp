@@ -36,3 +36,21 @@ dfs = pd.concat([fb, msft, aapl], axis=1)
 dfs.plot();
 dfs.plot(subplots=True, figsize=(13, 6));
 # %%
+## bar charts ##
+boston = pd.read_csv('2017BostonMarathonTop1000.csv')
+print(boston.head())
+
+# %%
+# marathon runners by age (age - category - numerical value)
+#boston.Age.value_counts().plot(kind='bar', figsize=(12,6));
+ax = boston.Age.value_counts(sort=False).plot(kind='bar', figsize=(12,6)) # <Axes: >
+ax.set_xlabel('Age Group');
+ax.set_ylabel('# of runners');
+ # %%
+ax = boston.Age.value_counts(sort=False).plot(kind='barh', figsize=(12,6)) # <Axes: >
+ax.set_xlabel('Age Group');
+ax.set_ylabel('# of runners');
+# %%
+# marathon runners by gender?
+boston['M/F'].value_counts(normalize=True).plot(kind='barh');
+# %%
