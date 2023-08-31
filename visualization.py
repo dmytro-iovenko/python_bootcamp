@@ -62,3 +62,22 @@ games.groupby('Platform').NA_Sales.sum().plot(kind='pie');
 # does PS have a larger market share in JP?
 games.loc[:, ['NA_Sales', 'JP_Sales', 'Platform']].groupby('Platform').sum().plot(kind='pie', subplots=True);
 # %%
+## histograms ##
+drinks = pd.read_csv('drinks.csv')
+drinks.beer_servings.plot(kind='hist');  
+# %%
+ax = drinks.beer_servings.plot(kind='hist');
+ax.set_xlabel('Beer Servings');
+# %%
+ax = drinks.beer_servings.plot(kind='hist', bins=15);
+ax.set_xlabel('Beer Servings');
+# %%
+ax = drinks.beer_servings.plot(kind='hist', bins=5, orientation='horizontal');
+ax.set_xlabel('Beer Servings');
+# %%
+drinks.loc[:,'beer_servings':'wine_servings'].plot(kind='hist');
+# %%
+drinks.loc[:,'beer_servings':'wine_servings'].plot(kind='hist', alpha=0.6);
+# %%
+drinks.loc[:,'beer_servings':'wine_servings'].plot(kind='hist', subplots=True, alpha=0.6);
+# %%
