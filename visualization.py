@@ -81,3 +81,18 @@ drinks.loc[:,'beer_servings':'wine_servings'].plot(kind='hist', alpha=0.6);
 # %%
 drinks.loc[:,'beer_servings':'wine_servings'].plot(kind='hist', subplots=True, alpha=0.6);
 # %%
+## scatter plots ##
+# show the relationship between two numeric values
+sat = pd.read_csv('scores.csv')
+# is reading and writing more strongly associated than writing and math?
+math = sat.loc[sat['SAT Section']=='Math'].Score.reset_index(drop=True)
+writing = sat.loc[sat['SAT Section']=='Writing'].Score.reset_index(drop=True)
+reading = sat.loc[sat['SAT Section']=='Reading'].Score.reset_index(drop=True)
+scores = pd.concat([math, writing, reading], axis=1)
+scores.columns = ['Math','Writing', 'Reading']
+scores.plot(kind='scatter', x='Math', y='Writing');
+# %%
+#math.corr(writing) # 0.9341552744743178
+scores.plot(kind='scatter', x='Reading', y='Writing');
+reading.corr(writing) # 0.9854389581058105
+# %%
