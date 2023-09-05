@@ -96,3 +96,16 @@ scores.plot(kind='scatter', x='Math', y='Writing');
 scores.plot(kind='scatter', x='Reading', y='Writing');
 reading.corr(writing) # 0.9854389581058105
 # %%
+#Skill Challenge 19 - visualization examples #
+# 1) starting with the games dataset, create a pie plot that breaks down total game sales (Global_Sales)
+# by gaming console (Platform)
+games = pd.read_csv('games_sales.csv')
+games.groupby('Platform').sum().loc[:, 'Global_Sales'].plot(kind='pie');
+# 2) from the games dataset, create a smaller dataframe sport_games that contains total Global_Sales across Platforms
+# from all releases in the sport Genre. Set Name as the index.
+sport_games = games.loc[games.Genre=='Sports', ['Name', 'Global_Sales']].groupby('Name').sum()
+# 3) using sport_games, create a bar chart of the Top 20 best selling games
+#sport_games.sort_values(by='Global_Sales', ascending=False).head(20).plot(kind='bar');
+sport_games.nlargest(20, columns='Global_Sales').plot(kind='bar');
+# %%
+
